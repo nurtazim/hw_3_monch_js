@@ -44,6 +44,5 @@ span.append("x 4")
 const div =document.getElementsByClassName("item")
 const div_only= div[4]
 const parentDiv = div_only.parentNode;
-
 parentDiv.replaceChild(div_new,div_only  )
 
