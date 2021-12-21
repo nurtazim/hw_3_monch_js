@@ -1,0 +1,49 @@
+Задание 1
+
+Дана верстка (как пример):
+
+<p><b>Name: </b><span id="name"></span></p>
+<p><b>Region: </b><span id="region"></span></p>
+<p><b>Subregion: </b><span id="subregion"></span></p>
+<p><b>Capital: </b><span id="capital"></span></p>
+<p><b>Flag: </b><span id="flag"></span></p>
+
+Уровень 1
+Необходимо вывести в указанные поля информацию по выбранной вами стране (любой) с помощью API
+'https://restcountries.com/v3.1/name/kyrgyzstan'
+
+
+
+
+
+
+
+
+Где {name} - любое имя из списка: https://restcountries.com/v3.1/all
+Уровень 2
+Используя дополнительное поле ввода (пример верстки см. ниже) выведите информацию по введенной в поле стране после нажатия на кнопку.
+
+<input id="country-name" type="text">
+<button id="show">Show information</button>
+
+Если пользователь введет неверную страну (сервер вернет 404), отобразить сообщение об ошибке с помощью alert
+
+Задание 2
+Используя API списка всех стран выведите таблицу с информацией о всех странах наподобие такой:
+
+Code
+Flag
+Name
+Capital
+Population
+CN
+
+China
+Beijing
+1377422166
+KG
+
+Kyrgyzstan
+Bishkek
+6047800
+

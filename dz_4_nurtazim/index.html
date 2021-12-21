@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<input id="country-name" type="text">
+<button id="show">Show information</button>
+<p><b>Name: </b><span id="name"></span></p>
+<p><b>Region: </b><span id="region"></span></p>
+<p><b>Subregion: </b><span id="subregion"></span></p>
+<p><b>Capital: </b><span id="capital"></span></p>
+<p><b>Flag: </b><span id="flag"></span></p>
+
+<table>
+    <tbody id="tbody">
+    <tr>
+        <th>Code</th>
+        <th>Flag</th>
+        <th>Name</th>
+        <th>Capital</th>
+        <th>Population</th>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+
+<script type="text/javascript">
+    const tbody = document.getElementById("tbody")
+    fetch('https://restcountries.com/v3.1/all').then((data) => {
+        data.json().then(response => {
+            response.forEach(element => {
+                const all = document.createElement("tr")
+                all.setAttribute("id", "all")
+                tbody.append(all)
+
+                const code = document.createElement("td")
+                code.setAttribute("id", "code")
+                code.innerText = element.cca2
+                all.append(code)
+
+                const flag = document.createElement("img")
+                flag.setAttribute("src", element.flags.svg)
+                flag.style.height = "50px"
+                all.append(flag)
+                const name = document.createElement("td")
+                name.setAttribute("id", "name")
+                name.innerText = element.name["common"]
+                all.append(name)
+
+                const capital = document.createElement("td")
+                capital.setAttribute("id", "capital")
+                capital.innerText = element.capital
+                all.append(capital)
+
+                const population = document.createElement("td")
+                population.setAttribute("id", "population")
+                population.innerText = element.population
+                all.append(population)
+
+            })
+        })
+    })
+</script>
+
+<script type="text/javascript">
+    const name = document.getElementById("name")
+    const region = document.getElementById("region")
+    const subregion = document.getElementById("subregion")
+    const capital = document.getElementById("capital")
+    const flag = document.getElementById("flag")
+    const input = document.getElementById("country-name")
+    const button = document.getElementById("show")
+    const getData = () => {
+        fetch('https://restcountries.com/v3.1/name/' + input.value).then((data) => {
+                data.json().then(response => {
+                    response.forEach(element => {
+                        const image = document.getElementById("image")
+                        if (image === null) {
+                            name.innerText = element["name"]["common"]
+                            region.innerText = element.region
+                            subregion.innerText = element.subregion
+                            capital.innerText = element.capital
+                            const image_flag = document.createElement("img")
+                            image_flag.setAttribute("src", element.flags.svg)
+                            image_flag.setAttribute("id", "image")
+                            image_flag.style.width = "50px"
+                            flag.append(image_flag)
+                        } else {
+                            image.remove()
+                            name.innerText = element["name"]["common"]
+                            region.innerText = element.region
+                            subregion.innerText = element.subregion
+                            capital.innerText = element.capital
+                            const image_flag = document.createElement("img")
+                            image_flag.setAttribute("src", element.flags.svg)
+                            image_flag.setAttribute("id", "image")
+                            image_flag.style.width = "50px"
+                            flag.append(image_flag)
+                        }
+                    })
+                })
+            }
+        )
+        ;
+    }
+
+    button.onclick = () => {
+        if (input.value.length < 4) {
+            alert("Введите полное название страны");
+        } else {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://restcountries.com/v3.1/name/' + input.value);
+            xhr.send();
+            xhr.onload = function () {
+                if (xhr.status !== 200) {
+                    alert(`Ошибка ${xhr.status}: ${xhr.statusText} "Введите правильное название страны"`);
+                } else {
+                    getData()
+                    document.getElementById("country-name").value = "";
+                }
+            };
+        }
+    }
+
+</script>
+
+
+<style>
+tbody {
+    border-color: red white;
+    border-style: solid;
+
+}
+
+th {
+    border-color: #008a77;
+    border-style: solid;
+    padding: 5px;
+}
+
+td {
+    border-color: #008a77;
+    border-style: solid;
+    padding: 5px;
+}
+
+img {
+    border-color: #008a77;
+    border-style: solid;
+
+}
+</style>
+</html>
