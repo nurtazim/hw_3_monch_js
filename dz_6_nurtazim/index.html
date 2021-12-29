@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+</head>
+<body>
+<div class="search">
+    <input id="input" type="text" value="">
+    <button id="button" type="button" class="btn btn-primary">Поиск</button>
+</div>
+<div class="cart" id="cart" style="display: none">
+    <h1>Coctail info</h1>
+    <hr>
+    <h2>Ingredients:</h2>
+    <hr>
+    <div>
+        <div id="ingredients" class="ingredients"></div>
+    </div>
+    <hr>
+    <h1>Instructions:</h1>
+    <hr>
+    <div>
+        <div id="instructions"></div>
+    </div>
+</div>
+<div class="container" id="container">
+
+</div>
+
+
+</body>
+
+
+<script type="text/javascript">
+    const container = document.getElementById("container")
+    const button = document.getElementById("button")
+    const input = document.getElementById("input")
+    const showData = async () => {
+        container.innerHTML = ""
+        try {
+            const data = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=` + input.value);
+            const element = await data.json();
+            element.drinks.forEach(function (element, index) {
+                const all = document.createElement("div")
+                all.setAttribute("class", "all")
+                all.setAttribute("id", index)
+                container.append(all)
+                const image = document.createElement("img")
+                image.setAttribute("src", element["strDrinkThumb"])
+                image.style.width = "150px"
+                all.append(image)
+                const name = document.createElement("div")
+                name.setAttribute("class", "name")
+                name.innerText = element["strDrink"]
+                all.append(name)
+            });
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+
+
+    const showData1 = async () => {
+        try {
+            const data = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=` + input.value);
+        const element = await data.json();
+        element.drinks.forEach(function (element, index) {
+            const id_element = parseInt(index)
+            document.querySelectorAll(`.all[id]`).forEach(function (item, index) {
+                item.addEventListener('click', () => {
+                    cart.style.display = "block"
+                    const id = parseInt(index);
+                    let num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+                    let key = ["", "DE", "ES", "FR", "IT", "ZH-HANS", "ZH-HANT"]
+                    if (id_element === id) {
+                        for (let i = 0; i < num.length; i++) {
+                            const strIngredient = "strIngredient"
+                            const strMeasure = "strMeasure"
+                            const strInstruction = "strInstructions"
+                            if (element[strMeasure + num[i]] !== null && element[strIngredient + num[i]] !== null && element[strInstruction + key[i]] !== null) {
+                                const ingredients = document.getElementById("ingredients")
+                                const ingredient = document.createElement("div")
+                                ingredient.setAttribute("id", "ing")
+                                const imageingredients = document.createElement("img")
+                                const hr = document.createElement("hr")
+                                imageingredients.setAttribute("src", "https://www.thecocktaildb.com/images/ingredients/" + element[strIngredient + num[i]] + ".png")
+                                imageingredients.style.width = "100px"
+                                ingredients.append(ingredient)
+                                ingredients.append(imageingredients)
+                                ingredient.innerText = element[strIngredient + num[i]] + "-" + element[strMeasure + num[i]]
+                                const instructions = document.getElementById("instructions")
+                                const instruction = document.createElement("div")
+                                instruction.setAttribute("id", "inst")
+                                instructions.append(instruction)
+                                instruction.innerText = element[strInstruction + key[i]]
+                                instruction.append(hr)
+                                console.log(ingredient.innerText)
+                            }
+                        }
+                    }
+                })
+            })
+        })
+
+        }catch (e) {
+            console.log(e.message)
+    }}
+
+
+    button.onclick = () => {
+        showData()
+        showData1()
+        input.value = ""
+    }
+
+    const cart = document.getElementById("cart")
+    const inst = document.getElementById("instructions")
+    const ingr = document.getElementById("ingredients")
+    cart.insertAdjacentHTML("afterbegin", '<button class="remove-button">[x]</button>');
+    cart.firstChild.onclick = () => {
+        inst.innerText = ""
+        ingr.innerText = ""
+        const cart = document.getElementById("cart")
+        cart.style.display = "none"
+    }
+
+</script>
+
+<style>
+    .ingredients {
+        display: grid;
+    }
+
+    .cart {
+        position: absolute;
+        background: floralwhite;
+        width: 700px;
+        left: 500px;
+        margin: 0 auto;
+        text-align: left;
+    }
+
+    .container {
+        padding-top: 3%;
+    }
+
+    div {
+        text-align: center;
+    }
+
+    .name {
+        width: min-content;
+        color: red;
+        margin: 0 auto;
+        text-align: center;
+
+
+    }
+
+    img {
+        border-color: #008a77;
+        border-bottom-style: solid;
+        z-index: 0;
+
+    }
+
+    .all {
+        border-color: #008a77;
+        border-style: solid;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+
+    .search {
+        padding-top: 80px;
+        margin: 0 auto;
+        width: 1000px
+    }
+
+    input {
+        width: 800px;
+    }
+
+    button {
+        width: 100px;
+    }
+
+    .container {
+        margin: 0 auto;
+        width: 900px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+</style>
+
+</html>

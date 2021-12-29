@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+</head>
+<body>
+<div style="display: none" class="spinner-border" role="status">
+    <span class="visually-hidden">Loading...</span>
+</div>
+<div class="container" style="display: block" role="status">
+    <div class="center">
+    <input id="country-name" type="text">
+    <button id="show">Show information</button>
+    <p><b>Name: </b><span id="name"></span></p>
+    <p><b>Region: </b><span id="region"></span></p>
+    <p><b>Subregion: </b><span id="subregion"></span></p>
+    <p><b>Capital: </b><span id="capital"></span></p>
+    <p><b>Flag: </b><span id="flag"></span></p></div>
+<div id="all">
+
+    <table>
+        <tbody id="tbody">
+        <tr>
+            <th>Code</th>
+            <th>Flag</th>
+            <th>Name</th>
+            <th>Capital</th>
+            <th>Population</th>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+</div>
+
+
+
+
+</body>
+
+<script type="text/javascript">
+    const tbody = document.getElementById("tbody")
+    fetch('https://restcountries.com/v3.1/all').then((data) => {
+        data.json().then(response => {
+            response.forEach(element => {
+                const all = document.createElement("tr")
+                all.setAttribute("id", "all")
+                tbody.append(all)
+
+                const code = document.createElement("td")
+                code.setAttribute("id", "code")
+                code.innerText = element.cca2
+                all.append(code)
+
+                const flag = document.createElement("img")
+                flag.setAttribute("src", element.flags.svg)
+                flag.style.height = "50px"
+                all.append(flag)
+                const name = document.createElement("td")
+                name.setAttribute("id", "name")
+                name.innerText = element.name["common"]
+                all.append(name)
+
+                const capital = document.createElement("td")
+                capital.setAttribute("id", "capital")
+                capital.innerText = element.capital
+                all.append(capital)
+
+                const population = document.createElement("td")
+                population.setAttribute("id", "population")
+                population.innerText = element.population
+                all.append(population)
+
+            })
+        })
+    })
+</script>
+
+
+<script type="text/javascript">
+
+    const spiner = document.querySelector(".spinner-border")
+    const name = document.getElementById("name")
+    const region = document.getElementById("region")
+    const subregion = document.getElementById("subregion")
+    const capital = document.getElementById("capital")
+    const flag = document.getElementById("flag")
+    const input = document.getElementById("country-name")
+    const button = document.getElementById("show")
+
+
+    button.onclick = function () {
+        container.style.display="none"
+
+        fetch('https://restcountries.com/v3.1/name/' + input.value).then(response => {
+            response.json().then(data => {
+
+                spiner.style.display = "none"
+                flag.innerHTML = ""
+                name.innerText = data[0].name["common"]
+                region.innerText = data[0].region
+                subregion.innerText = data[0].subregion
+                capital.innerText = data[0].capital
+                const image_flag = document.createElement("img")
+                image_flag.setAttribute("src", data[0].flags.svg)
+                image_flag.setAttribute("id", "image")
+                image_flag.style.width = "50px"
+                flag.append(image_flag)
+            }).catch(e => {
+                alert(e.message)
+            })
+        })
+    }
+
+
+</script>
+
+<style>
+
+
+    .spinner-border {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -50px;
+        width: 100px;
+        height: 100px;
+
+    }
+
+
+
+    .center {
+        padding-top: 300px;
+        margin: 0 auto;
+        width: 500px;
+        margin: 0 auto;
+
+    }
+
+    table {
+        margin: 0 auto;
+        width: 80%;
+    }
+
+    tbody {
+        border-style: solid;
+        margin: 0 auto;
+
+    }
+
+    th {
+        border-color: #008a77;
+        border-style: solid;
+        padding: 5px;
+        border-width: 2px;
+    }
+
+    td {
+        border-color: #008a77;
+        border-style: solid;
+        padding: 5px;
+        border-width: 2px;
+    }
+
+    img {
+        border-color: #008a77;
+        border-style: solid;
+        margin: 0 auto;
+        /*display: flex;*/
+
+    }
+</style>
+</html>

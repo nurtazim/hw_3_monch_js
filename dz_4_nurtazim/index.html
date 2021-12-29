@@ -46,6 +46,9 @@
                 flag.setAttribute("src", element.flags.svg)
                 flag.style.height = "50px"
                 all.append(flag)
+
+
+
                 const name = document.createElement("td")
                 name.setAttribute("id", "name")
                 name.innerText = element.name["common"]
@@ -109,7 +112,7 @@
     }
 
     button.onclick = () => {
-        if (input.value.length < 4) {
+        if (input.value.length < 3) {
             alert("Введите полное название страны");
         } else {
             let xhr = new XMLHttpRequest();
@@ -125,6 +128,8 @@
             };
         }
     }
+
+
 
 </script>
 
