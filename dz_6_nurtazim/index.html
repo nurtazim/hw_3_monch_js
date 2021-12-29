@@ -63,51 +63,58 @@
     }
 
 
+    const inst = document.getElementById("instructions")
+    const ingr = document.getElementById("ingredients")
     const showData1 = async () => {
         try {
             const data = await fetch(`https://www.thecocktaildb.com/api/json/v1/1/search.php?s=` + input.value);
-        const element = await data.json();
-        element.drinks.forEach(function (element, index) {
-            const id_element = parseInt(index)
-            document.querySelectorAll(`.all[id]`).forEach(function (item, index) {
-                item.addEventListener('click', () => {
-                    cart.style.display = "block"
-                    const id = parseInt(index);
-                    let num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
-                    let key = ["", "DE", "ES", "FR", "IT", "ZH-HANS", "ZH-HANT"]
-                    if (id_element === id) {
-                        for (let i = 0; i < num.length; i++) {
-                            const strIngredient = "strIngredient"
-                            const strMeasure = "strMeasure"
-                            const strInstruction = "strInstructions"
-                            if (element[strMeasure + num[i]] !== null && element[strIngredient + num[i]] !== null && element[strInstruction + key[i]] !== null) {
-                                const ingredients = document.getElementById("ingredients")
-                                const ingredient = document.createElement("div")
-                                ingredient.setAttribute("id", "ing")
-                                const imageingredients = document.createElement("img")
-                                const hr = document.createElement("hr")
-                                imageingredients.setAttribute("src", "https://www.thecocktaildb.com/images/ingredients/" + element[strIngredient + num[i]] + ".png")
-                                imageingredients.style.width = "100px"
-                                ingredients.append(ingredient)
-                                ingredients.append(imageingredients)
-                                ingredient.innerText = element[strIngredient + num[i]] + "-" + element[strMeasure + num[i]]
-                                const instructions = document.getElementById("instructions")
-                                const instruction = document.createElement("div")
-                                instruction.setAttribute("id", "inst")
-                                instructions.append(instruction)
-                                instruction.innerText = element[strInstruction + key[i]]
-                                instruction.append(hr)
-                                console.log(ingredient.innerText)
+            const element = await data.json();
+            element.drinks.forEach(function (element, index) {
+                const id_element = parseInt(index)
+                document.querySelectorAll(`.all[id]`).forEach(function (item, index) {
+                    item.addEventListener('click', () => {
+                        cart.style.display = "block"
+                        const id = parseInt(index);
+                        let num = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"]
+                        let key = ["", "DE", "ES", "FR", "IT", "ZH-HANS", "ZH-HANT"]
+                        if (id_element === id) {
+                            if (inst.innerText !== "" && ingr.innerText !== "") {
+                                inst.innerText = ""
+                                ingr.innerText = ""
+                            }
+                            for (let i = 0; i < num.length; i++) {
+                                const strIngredient = "strIngredient"
+                                const strMeasure = "strMeasure"
+                                const strInstruction = "strInstructions"
+                                if (element[strMeasure + num[i]] !== null && element[strIngredient + num[i]] !== null && element[strInstruction + key[i]] !== null) {
+                                    const ingredients = document.getElementById("ingredients")
+                                    const ingredient = document.createElement("div")
+                                    ingredient.setAttribute("id", "ing")
+                                    const imageingredients = document.createElement("img")
+                                    const hr = document.createElement("hr")
+                                    imageingredients.setAttribute("src", "https://www.thecocktaildb.com/images/ingredients/" + element[strIngredient + num[i]] + ".png")
+                                    imageingredients.style.width = "100px"
+                                    ingredients.append(ingredient)
+                                    ingredients.append(imageingredients)
+                                    ingredient.innerText = element[strIngredient + num[i]] + "-" + element[strMeasure + num[i]]
+                                    const instructions = document.getElementById("instructions")
+                                    const instruction = document.createElement("div")
+                                    instruction.setAttribute("id", "inst")
+                                    instructions.append(instruction)
+                                    instruction.innerText = element[strInstruction + key[i]]
+                                    instruction.append(hr)
+                                    console.log(ingredient.innerText)
+                                }
                             }
                         }
-                    }
+                    })
                 })
             })
-        })
 
-        }catch (e) {
+        } catch (e) {
             console.log(e.message)
-    }}
+        }
+    }
 
 
     button.onclick = () => {
@@ -117,8 +124,7 @@
     }
 
     const cart = document.getElementById("cart")
-    const inst = document.getElementById("instructions")
-    const ingr = document.getElementById("ingredients")
+
     cart.insertAdjacentHTML("afterbegin", '<button class="remove-button">[x]</button>');
     cart.firstChild.onclick = () => {
         inst.innerText = ""
@@ -126,7 +132,6 @@
         const cart = document.getElementById("cart")
         cart.style.display = "none"
     }
-
 </script>
 
 <style>
